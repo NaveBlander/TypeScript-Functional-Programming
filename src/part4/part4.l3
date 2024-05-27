@@ -2,15 +2,59 @@
 
 (define append
     (lambda (l1 l2)
-    @todo
-))
+        (if (eq? l1 '())
+            l2
+            (cons (car l1) (append (cdr l1) l2) 
+))))
+
 
 (define reverse
     (lambda (l)
-    @todo
-))
+        (if (eq? l '())
+            '()                                ; Base case: return empty list if l is empty
+            (append (reverse (cdr l))          ; Reverse the rest of the list
+                    (list (car l))))))         ; Append the first element to the reversed list
+
 
 (define duplicate-items
     (lambda (lst, dup-count)
-    @todo    
-))
+
+
+    (define (duplicate dupCount dupNum)
+        (if (0? dupCount)
+            '()
+            (cons dupNum (duplicate (- dupCount 1) dupNum))))
+
+
+    (define cyclic-dup-count 
+        (lambda (index)
+
+            (define buildCountList
+                (lambda (dupCountCopy, lstCopy)
+
+                    (define isBigger
+                        lambda (number, number))
+
+                    (if (isBigger (length dupCountCopy) (length lstCopy))
+                        dupCountCopy
+                        (buildCountList (append (dupCountCopy dup-count)) lstCopy)
+                    )
+                )
+            )
+
+            buildCountList(dup-count lst) [+ index 1]
+
+    ))
+
+
+    (define (apply-duplicates lst count index)
+        (if (eq? lst '())
+            '()
+            (append (duplicate count (car lst))
+                    (apply-duplicates (cdr lst)
+                                    (cyclic-dup-count index)
+                                    (+ index 1)))))
+
+
+    (apply-duplicates lst (car dup-count) 0))    
+)
