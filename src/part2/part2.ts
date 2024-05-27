@@ -21,7 +21,8 @@ const isVowel: (char: string) => boolean = (char: string): boolean => {
 /* Question 2 */
 export const isPaired: (text: string) => boolean = (text: string): boolean => {
     const characters: string[] = stringToArray(text);
-    const onlyParan: string[] = characters.filter(isOpening || isClosing);
+    // const onlyParan: string[] = characters.filter(isOpening || isClosing);
+    const onlyParan: string[] = characters.filter(char => (isOpening(char) || isClosing(char)));
     const stringOfParans: string = onlyParan.reduce((acc: string, curr: string) => 
         acc.concat(curr), "");
     return checkPaired(stringOfParans, []);
@@ -66,14 +67,16 @@ export type WordTree = {
 }
 
 export const treeToSentence : (tree: WordTree) => string = (tree: WordTree) : string => {
-    return (tree.root.concat(treeToSentence(tree.children[0])).concat(treeToSentence(tree.children[1])));
+    return treeRecursion(tree);
 }
 
-const treeRecursion : (tree: WordTree, counter: number) => string = (tree: WordTree, counter: number) : string => {
-    tree.children.length === 0 ? //we're on a leaf
-        (tree.root.concat("")) :
-        (tree.root.concat(treeRecursion(tree.children[counter], counter + 1)));
 
-        
+const treeRecursion: (tree: WordTree) => string = (tree: WordTree): string => {
+    return tree.children.length === 0
+        ? tree.root
+        : tree.root.concat(" ").concat(arrToString(tree.children.map(treeRecursion)));
 }
 
+const arrToString: (array: string[]) => string = (array: string[]): string => {
+    return array.reduce((acc: string, curr: string) => acc.concat(" ").concat(curr), "").trim();
+}
