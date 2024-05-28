@@ -1,5 +1,10 @@
 #lang racket/base
 
+; Signature: append (l1 l2)
+; Type: [ List(T) * List(T) -> List(T) ]
+; Purpose: Returns the concatenated content of both lists as a list
+; Pre-conditions: true
+; Tests: (append '(1 2) '(3 4)) -> '(1 2 3 4); (append '("a" "b") '("c") -> '("a" "b" "c"));
 (define append
     (lambda (l1 l2)
         (if (eq? l1 '())
@@ -7,30 +12,55 @@
             (cons (car l1) (append (cdr l1) l2) 
 ))))
 
-
+; Signature: reverse (l)
+; Type: [ List(T) -> List(T) ]
+; Purpose: Returns a list that it's content is in reversed order as the given list
+; Pre-conditions: true
+; Tests: (reverse '(1 2 3)) -> '(3 2 1); (reverse '("a" "b" "c" "d") -> '("d" "c" "b" "a"));
 (define reverse
     (lambda (l)
         (if (eq? l '())
-            '()                                ; Base case: return empty list if l is empty
-            (append (reverse (cdr l))          ; Reverse the rest of the list
-                    (list (car l))))))         ; Append the first element to the reversed list
+            '()                                
+            (append (reverse (cdr l))          
+                    (list (car l))))))       
 
-
+; Signature: duplicate-items (l1, l2)
+; Type: [ List(T) * List(number)-> List(T) ]
+; Purpose: Duplicates each item of l1 according to the number defined in the same position in l2,
+;          in case l2 is shorter than l1, l2 should be treated as a cyclic list. Returns the duplicated list.
+; Pre-conditions: l2 is not empty.
+; Tests: (duplicate-items '(1 2 3) '(1 0)) -> '(1 3); (duplicate-items '(1 2 3) '(2 1 0 10 2)) -> '(1 1 2);
+;        (duplicate-items '("a" "b" "c") '(2 0)) -> '("a" "a" "c" "c");
 (define duplicate-items
   (lambda (lst dup-count)
 
+; Signature: duplicate (t, count, l)
+; Type: [ T * nubmer * List(T)-> List(T) ]
+; Purpose: Duplicates t count times and appends it to the end of l.
+; Pre-conditions: count >= 0.
+; Tests: (duplicate "A" 4 '()) -> '("A" "A" "A" "A"); (duplicate 6 0 '(6 6)) -> '(6 6);
     (define duplicate 
       (lambda (dupNum dupCount lst)
         (if (eq? dupCount 0)
             lst
             (duplicate dupNum (- dupCount 1) (append lst (cons dupNum '()))))))
 
+; Signature: lengthOfLst (l, num)
+; Type: [ List<T> * nubmer -> number ]
+; Purpose: Calculate and returns the length of a given list.
+; Pre-conditions: num >= 0.
+; Tests: (lengthOfLst '("a" "b" "c") 0) -> 3; (lengthOfLst '(0 7 5 9 3) 3) -> 8;
     (define lengthOfLst
       (lambda (lst counter)
         (if (eq? lst '())
             counter
             (lengthOfLst (cdr lst) (+ counter 1)))))
 
+; Signature: newDupCount (dup-count, len1, len2)
+; Type: [ List<number> * number * number -> List<number> ]
+; Purpose: Duplicates dup-count until it's length >= len1.
+; Pre-conditions: dup-count is not empty.
+; Tests: (newDupCount '(1 2) 5 2) -> '(1 2 1 2 1 2); (newDupCount '(0 3 1) 2 3) -> '(0 3 1);
     (define newDupCount                                        
       (lambda (dupl len1 len2)
         (if (> len2 len1)
@@ -39,6 +69,12 @@
                 dupl
                 (newDupCount (append dupl dupl) len1 (+ len2 len2))))))
 
+; Signature: apply-duplicates (lst, dup-count)
+; Type: [ List<T> * List<number> -> List<T> ]
+; Purpose: Duplicates each item of lst according to the number defined in the same position in dup-count.
+; Pre-conditions: dup-count is not empty.
+; Tests: (apply-duplicates '("A" "C" "C") '(0 1 2 3)) -> '("C" "C" "C");
+;        (apply-duplicates '(3 5 2) '(2 0 3)) -> '(3 3 2 2 2);
     (define apply-duplicates 
       (lambda (lst dup-count)
         (if (eq? lst '())
