@@ -17,44 +17,36 @@
 
 
 (define duplicate-items
-    (lambda (lst, dup-count)
+  (lambda (lst dup-count)
 
+    (define duplicate 
+      (lambda (dupNum dupCount lst)
+        (if (eq? dupCount 0)
+            lst
+            (duplicate dupNum (- dupCount 1) (append lst (cons dupNum '()))))))
 
-    (define (duplicate dupCount dupNum)
-        (if (0? dupCount)
-            '()
-            (cons dupNum (duplicate (- dupCount 1) dupNum))))
+    (define lengthOfLst
+      (lambda (lst counter)
+        (if (eq? lst '())
+            counter
+            (lengthOfLst (cdr lst) (+ counter 1)))))
 
+    (define newDupCount                                        
+      (lambda (dupl len1 len2)
+        (if (> len2 len1)
+            dupl
+            (if (= len2 len1)
+                dupl
+                (newDupCount (append dupl dupl) len1 (+ len2 len2))))))
 
-    (define cyclic-dup-count 
-        (lambda (index)
-
-            (define buildCountList
-                (lambda (dupCountCopy, lstCopy)
-
-                    (define isBigger
-                        lambda (number, number))
-
-                    (if (isBigger (length dupCountCopy) (length lstCopy))
-                        dupCountCopy
-                        (buildCountList (append (dupCountCopy dup-count)) lstCopy)
-                    )
-                )
-            )
-
-            buildCountList(dup-count lst) [+ index 1]
-
-    ))
-
-
-    (define (apply-duplicates lst count index)
+    (define apply-duplicates 
+      (lambda (lst dup-count)
         (if (eq? lst '())
             '()
-            (append (duplicate count (car lst))
-                    (apply-duplicates (cdr lst)
-                                    (cyclic-dup-count index)
-                                    (+ index 1)))))
+            (append (duplicate (car lst) (car dup-count) '())
+                    (apply-duplicates (cdr lst) (cdr dup-count))))))
 
-
-    (apply-duplicates lst (car dup-count) 0))    
-)
+    (apply-duplicates lst 
+                      (newDupCount dup-count 
+                                   (lengthOfLst lst 0) 
+                                   (lengthOfLst dup-count 0)))))
