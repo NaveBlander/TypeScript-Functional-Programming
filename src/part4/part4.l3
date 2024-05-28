@@ -59,7 +59,7 @@
 ; Signature: newDupCount (dup-count, len1, len2)
 ; Type: [ List<number> * number * number -> List<number> ]
 ; Purpose: Duplicates dup-count until it's length >= len1.
-; Pre-conditions: dup-count is not empty.
+; Pre-conditions: dup-count is not empty and contains only natural numbers.
 ; Tests: (newDupCount '(1 2) 5 2) -> '(1 2 1 2 1 2); (newDupCount '(0 3 1) 2 3) -> '(0 3 1);
     (define newDupCount                                        
       (lambda (dupl len1 len2)
@@ -72,7 +72,7 @@
 ; Signature: apply-duplicates (lst, dup-count)
 ; Type: [ List<T> * List<number> -> List<T> ]
 ; Purpose: Duplicates each item of lst according to the number defined in the same position in dup-count.
-; Pre-conditions: dup-count is not empty.
+; Pre-conditions: dup-count is not empty and contains only natural numbers.
 ; Tests: (apply-duplicates '("A" "C" "C") '(0 1 2 3)) -> '("C" "C" "C");
 ;        (apply-duplicates '(3 5 2) '(2 0 3)) -> '(3 3 2 2 2);
     (define apply-duplicates 
