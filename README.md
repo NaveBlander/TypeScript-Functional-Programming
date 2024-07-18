@@ -32,5 +32,5 @@ This project implements various utilities and functions in TypeScript and Racket
 
 ## Testing
 
-- Unit tests are located in the `__tests__` directory.
+- Unit tests are located in the `tests` directory.
 - Run tests with `npm test`.
