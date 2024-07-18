@@ -1,4 +1,4 @@
-# Project Name
+# TypeScript-Functional-Programming
 
 ## Description
 
